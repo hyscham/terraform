@@ -18,7 +18,7 @@ echo '************************************************************'
 
 echo '1- Move to new home dir'
 echo '.... done'
-cd   ~/
+cd $HOME
 
 echo '2- Create a working dir'
 echo '.... done'
