@@ -1,0 +1,5 @@
+prefix = "hys"
+location = "West Europe"
+admin_username = "efk_admin"
+admin_password = "P@ssw0rd1234!"
+computer_name = "efkServer"

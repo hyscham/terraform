@@ -1,0 +1,369 @@
+
+  ######################################### Hys: Create Vnet #####################################
+
+
+
+  resource 
+  "azurerm_virtual_network" "chamkha_terra_vnet" {
+
+    name = 
+    "efk_terraform_vnet"
+
+    address_space = ["192.168.0.0/16"]
+
+    location = 
+    "West Europe"
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+
+
+    tags = {
+
+      environment = 
+      "chamkha_test_env"
+
+    }
+
+  }
+
+
+
+  ###################################### Hys: Create Subnet ######################################
+
+
+
+  resource 
+  "azurerm_subnet" "chamkha_terra_subnet" {
+
+    name = 
+    "efk_terraform_subnet"
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+    virtual_network_name = azurerm_virtual_network.chamkha_terra_vnet.name
+
+    address_prefixes = ["192.168.10.0/24"]
+
+  }
+
+
+
+  ############################ Hys: Create Network Security Group ################################
+
+
+
+  resource 
+  "azurerm_network_security_group" "chamkha_terra_security" {
+
+    name = 
+    "efk_terraform_security_group"
+
+    location = 
+    "West Europe"
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+
+    security_rule {
+
+      name = 
+      "SSH"
+
+      priority = 
+      1001
+
+      direction = 
+      "Inbound"
+
+      access = 
+      "Allow"
+
+      protocol = 
+      "Tcp"
+
+      source_port_range = 
+      "*"
+
+      destination_port_range = 
+      "22"
+
+      source_address_prefix = 
+      "*"
+
+      destination_address_prefix = 
+      "*"
+
+    }
+
+
+
+    tags = {
+
+      environment = 
+      "chamkha_test_env"
+
+    }
+
+  }
+
+
+
+  ################################################################################################
+
+
+
+
+
+
+
+  ###################################### Hys: Create Public IP ###################################
+
+
+
+  resource 
+  "azurerm_public_ip" "chamkha_terra_public_ip" {
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+    name = 
+    "efk_terraform_public_ip"
+
+    location = 
+    "West Europe"
+
+    allocation_method = 
+    "Static"
+
+
+
+    tags = {
+
+      environment = 
+      "chamkha_test_env"
+
+    }
+
+  }
+
+
+
+  ################################# Hys: Create Vnet nic ########################################
+
+
+
+  resource 
+  "azurerm_network_interface" "chamkha_terra_nic" {
+
+    name = 
+    "efk_terraform_nic"
+
+    location = 
+    "West Europe"
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+
+
+    ip_configuration {
+
+      name = 
+      "efk_terra_nic_config"
+
+      subnet_id = azurerm_subnet.chamkha_terra_subnet.id
+
+      private_ip_address_allocation = 
+      "Static"
+
+      private_ip_address = 
+      "192.168.10.5"
+
+      public_ip_address_id = azurerm_public_ip.chamkha_terra_public_ip.id
+
+    }
+
+
+
+    tags = {
+
+      environment = 
+      "chamkha_test_env"
+
+    }
+
+  }
+
+  #output "public_ip_address" {
+
+  # value = azurerm_public_ip.chamkha_terra_public_ip.ip_address
+
+  #}
+
+
+
+  ################################# Hys: attach nic to security Group ###########################
+
+  resource 
+  "azurerm_network_interface_security_group_association" 
+  "chamkha_vnet-sg_attach" {
+
+    network_interface_id = azurerm_network_interface.chamkha_terra_nic.id
+
+    network_security_group_id = azurerm_network_security_group.chamkha_terra_security.id
+
+  }
+
+
+
+  ################################## Hys: Ssh remote access #####################################
+
+
+
+  #resource "tls_private_key" "efk_ssh_key" {
+
+  # algorithm = "RSA"
+
+  # rsa_bits = 4096
+
+  #}
+
+
+
+  #output "tls_private_key" { value = "tls_private_key.efk_ssh_key.private_key_pem" }
+
+
+
+  ############################# Hys: Create virtual machine ######################################
+
+
+
+  resource 
+  "azurerm_linux_virtual_machine" "chamkha_terra_vm" {
+
+    name = 
+    "efk_terraform_vm"
+
+    location = 
+    "West Europe"
+
+    resource_group_name = azurerm_resource_group.chamkha_terra_rg.name
+
+    network_interface_ids = [azurerm_network_interface.chamkha_terra_nic.id]
+
+    size = 
+    "Standard_DS1_v2"
+
+    computer_name = 
+    "efk.server.azure"
+
+    disable_password_authentication 
+    = false
+
+    admin_password = 
+    "root"
+
+    admin_username = 
+    "root"
+
+
+
+    os_disk {
+
+      name = 
+      "chamkha_terra_vm_OsDisk"
+
+      caching = 
+      "ReadWrite"
+
+      storage_account_type = 
+      "Premium_LRS"
+
+    }
+
+
+
+    source_image_reference {
+
+      publisher = 
+      "OpenLogic"
+
+      offer = 
+      "CentOS"
+
+      sku = 
+      "7.5"
+
+      version = 
+      "latest"
+
+    }
+
+
+
+
+
+  #admin_ssh_key {
+
+  # username = "adminuser"
+
+  # public_key = tls_private_key.efk_ssh_key.public_key_openssh
+
+  #}
+
+
+
+  ################################ Hys: VM Software provisioning #################################
+
+
+
+  provisioner 
+  "remote-exec" {
+
+    connection {
+
+  #type = "ssh"
+
+  #host = azurerm_public_ip.chamkha_terra_public_ip.ip_address
+
+  #user = azurerm_linux_virtual_machine.chamkha_terra_vm.admin_username
+
+  #password = azurerm_linux_virtual_machine.chamkha_terra_vm.admin_password
+
+  port = 
+  22
+
+  timeout = 
+  "1m" 
+
+  #agent = true
+
+  host = self.public_ip_address
+
+  user=self.admin_username
+
+  password=self.admin_password
+
+}
+
+inline = [
+
+"mkdir ~/efk_repos",
+
+"cd ~/efk_repos",
+
+"sudo curl -O 
+https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.5.0-linux-x86_64.tar.gz",
+
+"sudo tar -xzf elasticsearch-oss-7.5.0-linux-x86_64.tar.gz"
+
+]
+
+}
+
+  ###############################################################################################
+
+}
+
+
+
+  ################################################################################################
