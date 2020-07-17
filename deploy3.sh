@@ -54,7 +54,7 @@ echo '... Done'
 
 echo '7- First run .... port 9200 should be opened on nsg '
 cd bin
-./elasticsearch
+./elasticsearch --allow-root
 
 echo '*****************************************************************'
 echo '**************** Kibana 7.7.0 OSS install  **********************'
@@ -86,9 +86,9 @@ echo '.... done'
 
 echo '7- First run .... port 5601 should be opened on nsg '
 cd bin
-./kibana
+./kibana --allow-root
 
-ip -a|grep inet
+ip a|grep inet
 
 echo '**********************************`Server_IP`***********************************************'
 echo ' CAP GEMINI '
