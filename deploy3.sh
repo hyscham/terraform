@@ -8,8 +8,7 @@ echo '************************************************************'
 
 
 echo '1- Installing OpenJdk 1.8 ...'
-#sudo yum install java-1.8.0-openjdk -y
-sudo yum install java-1.8.0-openjdk-devel unzip -y
+yum install java-1.8.0-openjdk-devel unzip -y
 echo '.....done'
 
 echo '************************************************************'
