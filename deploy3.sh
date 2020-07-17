@@ -22,17 +22,17 @@ echo '.... done'
 
 echo '2- Create a working dir'
 echo '.... done'
-mkdir ~/efk
+sudo mkdir ~/efk
 
-cd efk
+cd ~/efk
 
 
 echo '3- Download ElasticSearch 7.7.0 OSS'
-curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
+sudo curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 echo '.... done'
 
 echo '4- Untar downloaded package....'
-tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
+sudo tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 mv elasticsearch*/ elasticsearch
 cd elasticsearch
 
