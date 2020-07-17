@@ -40,11 +40,11 @@ sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
 echo "`ls -lha`"
 
 echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
-sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
+bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
 echo '..... Done'
 
 echo '6- Download and Install OpenDistro Alerting plugin for ElasticSearch ... '
-sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
+bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
 echo '... Done.'
 
 
@@ -76,7 +76,7 @@ echo '4- Move to elastic Folder'
 cd kibana
 
 echo '5- Install OpenDistro Alerting plugin for Kibana'
-sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
+bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
 
 echo '6- Config Kibana parameters'
 echo 'server.host: 0.0.0.0' >> config/kibana.yml
@@ -90,6 +90,6 @@ cd bin
 
 ip -a|grep inet
 
-echo '*******************************************************************************************'
+echo '**********************************`Server_IP`***********************************************'
 echo ' CAP GEMINI '
 echo '**************************************   All rights reserved by Capgemini. Copyright © 2020'
