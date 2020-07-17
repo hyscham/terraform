@@ -40,16 +40,16 @@ sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
 echo "`ls -lha`"
 
 echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
-bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
+sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
 echo '..... Done'
 
 echo '6- Download and Install OpenDistro Alerting plugin for ElasticSearch ... '
-bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
+sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
 echo '... Done.'
 
 
 echo '6- Configuring network-host parameter for elasticsearch '
-echo 'network.host: 127.0.0.1' >> config/elasticsearch.yaml
+echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo '... Done'
 
 echo '7- First run .... port 9200 should be opened on nsg '
@@ -76,7 +76,7 @@ echo '4- Move to elastic Folder'
 cd kibana
 
 echo '5- Install OpenDistro Alerting plugin for Kibana'
-bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
+sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
 
 echo '6- Config Kibana parameters'
 echo 'server.host: 0.0.0.0' >> config/kibana.yml
@@ -88,6 +88,7 @@ echo '7- First run .... port 5601 should be opened on nsg '
 cd bin
 ./kibana
 
+ip -a|grep inet
 
 echo '*******************************************************************************************'
 echo ' CAP GEMINI '
