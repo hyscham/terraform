@@ -2,8 +2,6 @@ echo '*********************** Centos 7.5 *************************'
 echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
-terraform output public_ip
-
 echo '*********************  Create efk user  ********************'
 sudo useradd -m efk
 
@@ -54,7 +52,7 @@ echo '6- Configuring network-host parameter for elasticsearch '
 #echo 'node.master: true' >> config/elasticsearch.yml
 #echo 'node.data: true' >> config/elasticsearch.yml
 #echo 'transport.host: localhost' >> config/elasticsearch.yml
-echo 'cluster.name: HYS-AMI-OSS' >> config/elasticsearch.yml
+echo 'cluster.name: hysOssCluster >> config/elasticsearch.yml
 echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
 echo '... Done'
@@ -62,7 +60,7 @@ echo '--------------------------------------------------------------------------
 cat config/elasticsearch.yml
 
 echo '7- First run .... port 9200 should be opened on nsg '
-chown -R efk:efk /home/efk/deploy/elasticsearch
+chown -R efk /home/efk/deploy/elasticsearch
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '*****************************************************************'
 echo '**************** Kibana 7.7.0 OSS install  **********************'
@@ -71,11 +69,11 @@ echo '*****************************************************************'
 echo '1- Download Kibana 7.7.0 OSS package'
 cd /home/efk/deploy
 curl -O https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.7.0-linux-x86_64.tar.gz
-echo '... done'
+echo '...done'
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '2- untar Kibana downloaded package'
 tar -xzf kibana-oss-7.7.0-linux-x86_64.tar.gz
-echo '... done'
+echo '...done'
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '3- Rename Kibana folder'
 mv kibana*/ kibana
@@ -89,12 +87,14 @@ sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/dow
 echo '6- Config Kibana parameters'
 echo 'server.host: 0.0.0.0' >> config/kibana.yml
 echo 'elasticsearch.hosts: ["http://localhost:9200"]' >> config/kibana.yml
-echo '.... done'
+echo '....done'
 cat config/kibana.yml
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '7- First run in daemon mode .... port 5601 should be opened on nsg to access kibana over internet'
-chown -R efk:efk /home/efk/deploy/kibana
+chown -R efk /home/efk/deploy/kibana
 #------------------------------------------------------------------------------------------------------------------------------------------------------
+
+echo 'Server IP :`curl ifconfig.co`'
 
 echo '*************************** Start Elastic in daemon mode ***************************************'
 cd /home/efk/deploy/elasticsearch/bin
