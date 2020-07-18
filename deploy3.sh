@@ -2,6 +2,13 @@ echo '*********************** Centos 7.5 *************************'
 echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
+
+
+echo '*********************  Create efk user  ********************'
+useradd -m efk
+
+
+
 echo '************************************************************'
 echo '********************* JDK configuration ********************'
 echo '************************************************************'
@@ -15,15 +22,12 @@ echo '************************************************************'
 echo '********** Elastic Search 7.7.0 OSS Install ****************'
 echo '************************************************************'
 
-echo '1- Move to new home dir'
-echo '.... done'
-
-
 echo '2- Create a working dir'
+mkdir /home/efk/deploy
 echo '.... done'
-sudo mkdir ~/efk
 
-cd ~/efk
+echo 'move to create dir'
+cd /home/efk/deploy
 
 
 echo '3- Download ElasticSearch 7.7.0 OSS'
@@ -33,11 +37,12 @@ echo '.... done'
 echo '4- Untar downloaded package....'
 tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 mv elasticsearch*/ elasticsearch
+
+
 cd elasticsearch
 
 sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
 
-echo "`ls -lha`"
 
 echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
 bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
@@ -53,15 +58,18 @@ echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo '... Done'
 
 echo '7- First run .... port 9200 should be opened on nsg '
-cd bin
-./elasticsearch --allow-root
+chown -R efk:efk /home/efk/deploy/elasticsearch
+cd /home/efk/deploy/elasticsearch/bin
+su efk -c "./elasticsearch"
+
+
 
 echo '*****************************************************************'
 echo '**************** Kibana 7.7.0 OSS install  **********************'
 echo '*****************************************************************'
 
 echo '1- Download Kibana 7.7.0 OSS package'
-cd ~/efk
+cd /home/efk/deploy
 curl -O https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.7.0-linux-x86_64.tar.gz
 echo '... done'
 
@@ -85,8 +93,10 @@ echo '.... done'
 
 
 echo '7- First run .... port 5601 should be opened on nsg '
-cd bin
-./kibana --allow-root
+chown -R efk:efk /home/efk/deploy/kibana
+cd /home/efk/deploy/kibana/bin
+su efk -c "./kibana"
+
 
 echo '**********************************`Server_IP`***********************************************'
 echo '********************************************************************************************'
