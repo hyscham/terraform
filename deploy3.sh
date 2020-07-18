@@ -3,7 +3,7 @@ echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
 echo '*********************  Create efk user  ********************'
-useradd -m efk
+sudo useradd -m efk
 
 echo '************************************************************'
 echo '********************* JDK configuration ********************'
@@ -24,25 +24,28 @@ echo '.... done'
 echo 'move to create dir'
 cd /home/efk/deploy
 
-
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 echo '3- Download ElasticSearch 7.7.0 OSS'
 curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 echo '.... done'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 echo '4- Untar downloaded package....'
 tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 mv elasticsearch*/ elasticsearch
 cd elasticsearch
 sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
+
 echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
-bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
+sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
 echo '..... Done'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
+
 echo '6- Download and Install OpenDistro Alerting plugin for ElasticSearch ... '
-bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
+sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
 echo '... Done.'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
+
 echo '6- Configuring network-host parameter for elasticsearch '
 #echo 'network.host: 0.0.0.0' >> config/elasticsearch.yml
 #echo 'network.bind_host: 0.0.0.0' >> config/elasticsearch.yml
@@ -53,7 +56,9 @@ echo 'cluster.name: HYS-AMI-OSS' >> config/elasticsearch.yml
 echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
 echo '... Done'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
+cat config/elasticsearch.yml
+
 echo '7- First run .... port 9200 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/elasticsearch
 #------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,23 +82,28 @@ echo '4- Move to kibana Folder'
 cd kibana
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '5- Install OpenDistro Alerting plugin for Kibana'
-bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
+sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 echo '6- Config Kibana parameters'
 echo 'server.host: 0.0.0.0' >> config/kibana.yml
 echo 'elasticsearch.hosts: ["http://localhost:9200"]' >> config/kibana.yml
 echo '.... done'
+cat config/kibana.yml
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '7- First run .... port 5601 should be opened on nsg '
+echo '7- First run in daemon mode .... port 5601 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/kibana
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-echo '*************************** Start Elastic ***************************************'
+echo '*************************** Start Elastic in daemon mode ***************************************'
 cd /home/efk/deploy/elasticsearch/bin
 su efk -c "./elasticsearch -d"
-echo '*************************** Start Kibana ****************************************'
+echo '*************************** Start Kibana in daemon mode ****************************************'
 cd /home/efk/deploy/kibana/bin
-su efk -c "./kibana"
+su efk -c "./kibana -d"
+echo '********************************************************************************************'
+
+
+
 
 echo '**********************************`Server_IP`***********************************************'
 echo '********************************************************************************************'
