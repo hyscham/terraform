@@ -54,13 +54,18 @@ echo '... Done.'
 
 
 echo '6- Configuring network-host parameter for elasticsearch '
-echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
+echo 'network.host: 0.0.0.0' >> config/elasticsearch.yml
+echo 'network.bind_host: 0.0.0.0' >> config/elasticsearch.yml
+echo 'node.master: true' >> config/elasticsearch.yml
+echo 'node.data: true' >> config/elasticsearch.yml
+echo 'transport.host: localhost' >> config/elasticsearch.yml
+
 echo '... Done'
 
 echo '7- First run .... port 9200 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/elasticsearch
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch -d &"
+su efk -c "./elasticsearch"
 
 
 
