@@ -94,7 +94,7 @@ echo '7- First run in daemon mode .... port 5601 should be opened on nsg to acce
 chown -R efk /home/efk/deploy/kibana
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
-echo 'Server IP :`curl ifconfig.co`'
+curl ifconfig.co
 
 echo '*************************** Start Elastic in daemon mode ***************************************'
 cd /home/efk/deploy/elasticsearch/bin
