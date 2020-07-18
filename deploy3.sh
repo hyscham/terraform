@@ -60,7 +60,7 @@ echo '... Done'
 echo '7- First run .... port 9200 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/elasticsearch
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch"
+su efk -c "./elasticsearch -d &"
 
 
 
@@ -80,7 +80,7 @@ echo '... done'
 echo '3- Rename Kibana folder'
 mv kibana*/ kibana
 
-echo '4- Move to elastic Folder'
+echo '4- Move to kibana Folder'
 cd kibana
 
 echo '5- Install OpenDistro Alerting plugin for Kibana'
@@ -95,7 +95,7 @@ echo '.... done'
 echo '7- First run .... port 5601 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/kibana
 cd /home/efk/deploy/kibana/bin
-su efk -c "./kibana"
+su efk -c "./kibana -d &"
 
 
 echo '**********************************`Server_IP`***********************************************'
