@@ -2,6 +2,8 @@ echo '*********************** Centos 7.5 *************************'
 echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
+terraform output public_ip
+
 echo '*********************  Create efk user  ********************'
 sudo useradd -m efk
 
@@ -90,7 +92,7 @@ echo 'elasticsearch.hosts: ["http://localhost:9200"]' >> config/kibana.yml
 echo '.... done'
 cat config/kibana.yml
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '7- First run in daemon mode .... port 5601 should be opened on nsg '
+echo '7- First run in daemon mode .... port 5601 should be opened on nsg to access kibana over internet'
 chown -R efk:efk /home/efk/deploy/kibana
 #------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -99,7 +101,7 @@ cd /home/efk/deploy/elasticsearch/bin
 su efk -c "./elasticsearch -d"
 echo '*************************** Start Kibana in daemon mode ****************************************'
 cd /home/efk/deploy/kibana/bin
-su efk -c "./kibana -d"
+su efk -c "./kibana"
 echo '********************************************************************************************'
 
 
