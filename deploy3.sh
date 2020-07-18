@@ -90,7 +90,7 @@ chown -R efk:efk /home/efk/deploy/kibana
 
 echo '*************************** Start Elastic ***************************************'
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch"
+su efk -c "./elasticsearch -d"
 echo '*************************** Start Kibana ****************************************'
 cd /home/efk/deploy/kibana/bin
 su efk -c "./kibana"
