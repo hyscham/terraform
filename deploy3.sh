@@ -52,7 +52,7 @@ echo '6- Configuring network-host parameter for elasticsearch '
 #echo 'node.master: true' >> config/elasticsearch.yml
 #echo 'node.data: true' >> config/elasticsearch.yml
 #echo 'transport.host: localhost' >> config/elasticsearch.yml
-echo 'cluster.name: hysOssCluster >> config/elasticsearch.yml
+echo 'cluster.name: hysOssCluster' >> config/elasticsearch.yml
 echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
 echo '... Done'
