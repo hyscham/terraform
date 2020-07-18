@@ -65,7 +65,7 @@ echo '... Done'
 echo '7- First run .... port 9200 should be opened on nsg '
 chown -R efk:efk /home/efk/deploy/elasticsearch
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch"
+su efk -c "./elasticsearch -d &&"
 
 
 
