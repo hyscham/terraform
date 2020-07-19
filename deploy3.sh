@@ -131,11 +131,11 @@ echo '3- Load metricbeat config file from Github'
 curl -O https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat.yml
 
 echo '4- Change metricbeat folder permissions to efk user' 
-chown -R efk_admin /home/efk/deploy/metricbeat
+chown -R hyscham /home/efk/deploy/metricbeat
 
 echo '************* Loading metricbeat dashboards*************************'
 #su efk -c "./metricbeat setup --dashboards"
-./metricbeat setup --dashboards
+sudo ./metricbeat setup --dashboards
 echo '********************************************************************'
 
 echo '*************  display server IP for outside tests ****************'
@@ -148,16 +148,20 @@ echo '*************************** Start Elastic in daemon mode *****************
 cd /home/efk/deploy/elasticsearch/bin
 su efk -c "./elasticsearch -d"
 
+sleep 30 ; echo "Fin du sleep!!"
+
+echo '*************************** Start Kibana in daemon mode ****************************************'
+cd /home/efk/deploy/kibana/bin
+su efk -c "./kibana &"
+echo '********************************************************************************************'
+
+sleep 30 ; echo "Fin du sleep!!"
+
+
 echo '***************************         Start MetricBeat    ***************************************'
 cd /home/efk/deploy/metricbeat
 #su efk -c "./metricbeat -e" 
 sudo ./metricbeat run &
-
-echo '*************************** Start Kibana in daemon mode ****************************************'
-cd /home/efk/deploy/kibana/bin
-su efk -c "./kibana"
-echo '********************************************************************************************'
-
 
 
 echo '********************************************************************************************'
