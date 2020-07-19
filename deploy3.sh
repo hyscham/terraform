@@ -59,6 +59,20 @@ echo '... Done'
 echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 cat config/elasticsearch.yml
 
+echo '*****************************************************************'
+echo '******* Download and install MetricBeat 7.7.0 OSS ***************'
+echo '*****************************************************************'
+
+cd /home/efk/deploy
+curl -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-oss-7.7.0-linux-x86_64.tar.gz
+echo '2- untar Kibana downloaded package'
+mv metric* metricbeat.tar.gz
+tar -xzf metricbeat.tar.gz
+mv metric*/ metricbeat
+
+echo '*****************************************************************'
+
+
 echo '7- First run .... port 9200 should be opened on nsg '
 chown -R efk /home/efk/deploy/elasticsearch
 #------------------------------------------------------------------------------------------------------------------------------------------------------
