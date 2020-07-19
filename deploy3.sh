@@ -2,16 +2,30 @@ echo '*********************** Centos 7.5 *************************'
 echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
-echo '*********************  Create efk user  ********************'
+
+echo '**********************Ssh config *****************************'
+echo 'Permit ssh login with password after deployment to fine tune configuration'
+sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+echo '************************************************************'
+
+
+
+
+echo '**************  Create efk user without password  ***********'
 sudo useradd -m efk
+'******************************************************************'
+
+
 
 echo '************************************************************'
 echo '********************* JDK configuration ********************'
 echo '************************************************************'
-
 echo '1- Installing OpenJdk 1.8 ...'
 yum install java-1.8.0-openjdk-devel unzip -y
 echo '.....done'
+echo '************************************************************'
+
+
 
 echo '************************************************************'
 echo '********** Elastic Search 7.7.0 OSS Install ****************'
@@ -24,22 +38,19 @@ echo '.... done'
 echo 'move to create dir'
 cd /home/efk/deploy
 
-echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 echo '3- Download ElasticSearch 7.7.0 OSS'
 curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 echo '.... done'
-echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
+
 echo '4- Untar downloaded package....'
 tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 mv elasticsearch*/ elasticsearch
 cd elasticsearch
 sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
-echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 
 echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
 sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
 echo '..... Done'
-echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 
 echo '6- Download and Install OpenDistro Alerting plugin for ElasticSearch ... '
 sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
@@ -57,75 +68,94 @@ echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
 echo '... Done'
 echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
-cat config/elasticsearch.yml
+
+
+
+
+echo '7- Change elasticsearch folder permissions to efk user'
+chown -R efk /home/efk/deploy/elasticsearch
+echo '...done'
+
+
+echo '*****************************************************************'
+echo '**************** Kibana 7.7.0 OSS install  **********************'
+echo '*****************************************************************'
+
+echo '1- Download Kibana 7.7.0 OSS package'
+cd /home/efk/deploy
+curl -O https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.7.0-linux-x86_64.tar.gz
+echo '...done'
+
+echo '2- untar Kibana downloaded package'
+tar -xzf kibana-oss-7.7.0-linux-x86_64.tar.gz
+echo '...done'
+
+echo '3- Rename Kibana folder'
+mv kibana*/ kibana
+
+echo '4- Move to kibana Folder'
+cd /home/efk/deploy/kibana
+
+
+echo '5- Install OpenDistro Alerting plugin for Kibana'
+sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
+
+echo '6- Config Kibana parameters'
+echo 'server.host: 0.0.0.0' >> config/kibana.yml
+echo 'elasticsearch.hosts: ["http://localhost:9200"]' >> config/kibana.yml
+echo '....done'
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '7- change kibana folder permissions to efk user'
+chown -R efk /home/efk/deploy/kibana
+#------------------------------------------------------------------------------------------------------------------------------------------------------
 
 echo '*****************************************************************'
 echo '******* Download and install MetricBeat 7.7.0 OSS ***************'
 echo '*****************************************************************'
 
+echo '1- Move to deplyment folder' 
 cd /home/efk/deploy
+
+echo '2- Download Metricbeat OSS package'
 curl -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-oss-7.7.0-linux-x86_64.tar.gz
-echo '2- untar Kibana downloaded package'
+
+echo '2- untar metricbeat downloaded package'
 mv metric* metricbeat.tar.gz
 tar -xzf metricbeat.tar.gz
 mv metric*/ metricbeat
+cd /home/efk/deploy/metricbeat
+mv metricbeat.yml metricbeat.yml.orig
 
-echo '*****************************************************************'
+echo '3- Load metricbeat config file from Github'
+curl -O https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat.yml
 
+echo '4- Change metricbeat folder permissions to efk user' 
+chown -R efk /home/efk/deploy/metricbeat
 
-echo '7- First run .... port 9200 should be opened on nsg '
-chown -R efk /home/efk/deploy/elasticsearch
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '*****************************************************************'
-echo '**************** Kibana 7.7.0 OSS install  **********************'
-echo '*****************************************************************'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '1- Download Kibana 7.7.0 OSS package'
-cd /home/efk/deploy
-curl -O https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.7.0-linux-x86_64.tar.gz
-echo '...done'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '2- untar Kibana downloaded package'
-tar -xzf kibana-oss-7.7.0-linux-x86_64.tar.gz
-echo '...done'
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '3- Rename Kibana folder'
-mv kibana*/ kibana
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '4- Move to kibana Folder'
-cd kibana
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '5- Install OpenDistro Alerting plugin for Kibana'
-sudo bin/kibana-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/kibana-plugins/opendistro-alerting/opendistro-alerting-1.8.0.0.zip
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '6- Config Kibana parameters'
-echo 'server.host: 0.0.0.0' >> config/kibana.yml
-echo 'elasticsearch.hosts: ["http://localhost:9200"]' >> config/kibana.yml
-echo '....done'
-cat config/kibana.yml
-#------------------------------------------------------------------------------------------------------------------------------------------------------
-echo '7- First run in daemon mode .... port 5601 should be opened on nsg to access kibana over internet'
-chown -R efk /home/efk/deploy/kibana
-#------------------------------------------------------------------------------------------------------------------------------------------------------
+echo '************* Loading metricbeat dashboards*************************'
+su efk -c "./metricbeat setup --dashboards"
+echo '********************************************************************'
 
+echo '*************  display server IP for outside tests ****************'
 curl ifconfig.co
+echo '********************************************************************'
+
+
 
 echo '*************************** Start Elastic in daemon mode ***************************************'
 cd /home/efk/deploy/elasticsearch/bin
 su efk -c "./elasticsearch -d"
+
+echo '***************************         Start MetricBeat    ***************************************'
+cd /home/efk/deploy/metricbeat
+su efk -c "./metricbeat run &&" 
+
 echo '*************************** Start Kibana in daemon mode ****************************************'
 cd /home/efk/deploy/kibana/bin
 su efk -c "./kibana"
 echo '********************************************************************************************'
 
-
-
-
-echo '********************************************************************************************'
-echo '********************************************************************************************'
-ip a|grep inet
-echo '********************************************************************************************'
-echo '********************************************************************************************'
 
 
 echo '********************************************************************************************'
