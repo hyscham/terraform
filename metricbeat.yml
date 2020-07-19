@@ -59,7 +59,7 @@ setup.dashboards.enabled: true
 # Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
 # This requires a Kibana endpoint configuration.
 setup.kibana:
-  host: "localhost:5601"
+  host: "0.0.0.0:5601"
   
 #================================ Outputs =====================================
 
