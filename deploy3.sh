@@ -3,12 +3,6 @@ echo 'Deploying ElasticSearch and Kibana on Cloud VM..............'
 echo '**************************** By h.ennakouch@gmail.com ******'
 
 
-echo '**********************Ssh config *****************************'
-echo 'Permit ssh login with password after deployment to fine tune configuration'
-sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
-echo '************************************************************'
-
-
 
 
 echo '**************  Create efk user without password  ***********'
@@ -135,23 +129,26 @@ curl -O https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat.ym
 echo '4- Change metricbeat folder permissions to efk user' 
 chown -R efk /home/efk/deploy/metricbeat
 
-echo '************* Loading metricbeat dashboards*************************'
+echo '************************ Loading metricbeat dashboards**************************************'
 su efk -c "./metricbeat setup --dashboards"
-echo '********************************************************************'
+echo '*********************************************************************************************'
 
-echo '*************  display server IP for outside tests ****************'
-curl ifconfig.co
-echo '********************************************************************'
+echo '****************************  display server IP for outside tests ****************************'
+curl ifconfig.c
+echo '**********************************************************************************************'
 
-echo '**************************** Install Fluend ****************************************************'
+echo '**************************** Install Fluend ***************************************************'
 sudo curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent4.sh | sh
 echo '*.* @10.0.2.100:5140' >> /etc/rsyslog.conf
 sudo systemctl restart rsyslog
 
+cd /etc/td-agent
+sudo mv td-agent.conf td-agent.conf.orig
+sudo curl -O https://raw.githubusercontent.com/hyscham/terraform/master/td-agent.conf
+sudo systemctl restart td-agent
+echo '*********************************** End FlentD config ********************************************'
 
-
-
-echo '*************************** Start Elastic in daemon mode ***************************************'
+echo '*************************** Start Elastic in daemon mode *****************************************'
 cd /home/efk/deploy/elasticsearch/bin
 su efk -c "./elasticsearch -d"
 
@@ -160,17 +157,33 @@ sleep 30 ; echo "Fin du sleep!!"
 echo '*************************** Start Kibana in daemon mode ****************************************'
 cd /home/efk/deploy/kibana/bin
 su efk -c "./kibana &"
-echo '********************************************************************************************'
+echo '************************************************************************************************'
 
 sleep 30 ; echo "Fin du sleep!!"
 
 
 echo '***************************         Start MetricBeat    ***************************************'
 cd /home/efk/deploy/metricbeat
-su efk -c "./metricbeat -e" 
+su efk -c "./metricbeat -e &" 
 #sudo ./metricbeat run &
 
 
-echo '********************************************************************************************'
+
+echo '*************  Connect to server IP for outside tests ******************************************'
+echo "http://`curl ifconfig.co`:5601"
+echo '************************************************************************************************'
+
+
+echo '************************************ Ssh config (Permit PasswordAuth) **************************'
+echo 'Permit ssh login with password after deployment to fine tune configuration'
+sudo sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
+echo '************************************************************************************************'
+
+
+
+
+
+echo '************************************************************************************************'
 echo ' CAP GEMINI '
-echo '**************************************   All rights reserved by Capgemini. Copyright © 2020'
+echo '**************************************   All rights reserved by Capgemini. Copyright © 2020 ****'
