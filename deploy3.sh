@@ -143,6 +143,12 @@ echo '*************  display server IP for outside tests ****************'
 curl ifconfig.co
 echo '********************************************************************'
 
+echo '**************************** Install Fluend ****************************************************'
+sudo curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent4.sh | sh
+echo '*.* @10.0.2.100:5140' >> /etc/rsyslog.conf
+sudo systemctl restart rsyslog
+
+
 
 
 echo '*************************** Start Elastic in daemon mode ***************************************'
