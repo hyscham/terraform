@@ -151,7 +151,7 @@ su efk -c "./elasticsearch -d"
 echo '***************************         Start MetricBeat    ***************************************'
 cd /home/efk/deploy/metricbeat
 #su efk -c "./metricbeat -e" 
-./metricbeat -e
+sudo ./metricbeat run &
 
 echo '*************************** Start Kibana in daemon mode ****************************************'
 cd /home/efk/deploy/kibana/bin
