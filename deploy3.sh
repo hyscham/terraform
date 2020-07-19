@@ -124,6 +124,8 @@ echo '2- untar metricbeat downloaded package'
 mv metric* metricbeat.tar.gz
 tar -xzf metricbeat.tar.gz
 mv metric*/ metricbeat
+
+chown -R efk /home/efk/deploy/metricbeat
 cd /home/efk/deploy/metricbeat
 mv metricbeat.yml metricbeat.yml.orig
 
@@ -131,11 +133,10 @@ echo '3- Load metricbeat config file from Github'
 curl -O https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat.yml
 
 echo '4- Change metricbeat folder permissions to efk user' 
-chown -R hyscham /home/efk/deploy/metricbeat
+chown -R efk /home/efk/deploy/metricbeat
 
 echo '************* Loading metricbeat dashboards*************************'
-#su efk -c "./metricbeat setup --dashboards"
-sudo ./metricbeat setup --dashboards
+su efk -c "./metricbeat setup --dashboards"
 echo '********************************************************************'
 
 echo '*************  display server IP for outside tests ****************'
@@ -160,8 +161,8 @@ sleep 30 ; echo "Fin du sleep!!"
 
 echo '***************************         Start MetricBeat    ***************************************'
 cd /home/efk/deploy/metricbeat
-#su efk -c "./metricbeat -e" 
-sudo ./metricbeat run &
+su efk -c "./metricbeat -e" 
+#sudo ./metricbeat run &
 
 
 echo '********************************************************************************************'
