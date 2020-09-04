@@ -150,7 +150,7 @@ echo '*********************************** End FlentD config ********************
 
 echo '*************************** Start Elastic in daemon mode *****************************************'
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch -d"
+su efk -c "./elasticsearch -d &"
 
 sleep 30 ; echo "Fin du sleep!!"
 
