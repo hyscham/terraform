@@ -100,6 +100,10 @@ echo '**************************************************************************
 echo '************************************ Ssh config (Permit PasswordAuth) **************************'
 echo 'Permit ssh login with password after deployment to fine tune configuration'
 sudo sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/.*PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+
+PermitRootLogin
 sudo systemctl restart sshd
 echo '************************************************************************************************'
 
