@@ -60,9 +60,18 @@ echo '6- Configuring network-host parameter for elasticsearch '
 #echo 'node.data: true' >> config/elasticsearch.yml
 #echo 'transport.host: localhost' >> config/elasticsearch.yml
 echo 'cluster.name: hysOssCluster' >> config/elasticsearch.yml
-echo 'network.host: localhost' >> config/elasticsearch.yml
-echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
+echo 'network.host: 0.0.0.0' >> config/elasticsearch.yml
+#echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
+echo 'transport.host: localhost' >> config/elasticsearch.yml
 echo '... Done'
+
+#transport.host: localhost
+#network.host: 0.0.0.0
+
+#transport.host: localhost
+#transport.tcp.port: 9300
+#http.port: 9200
+#network.host: 0.0.0.0
 echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
 
 
