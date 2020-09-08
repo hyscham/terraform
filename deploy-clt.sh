@@ -72,7 +72,6 @@ sudo systemctl restart rsyslog
 cd /etc/td-agent
 sudo mv td-agent.conf td-agent.conf.orig
 sudo curl -O https://raw.githubusercontent.com/hyscham/terraform/master/td-agent.conf
-sudo mv td-agent.conf td-agent.conf
 sudo systemctl restart td-agent
 echo '*********************************** End FlentD config ********************************************'
 
