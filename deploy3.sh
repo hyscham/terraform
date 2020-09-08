@@ -7,6 +7,7 @@ echo '**************************** By h.ennakouch@gmail.com ******'
 
 echo '**************  Create efk user without password  ***********'
 sudo useradd -m efk
+echo 'Done'
 echo '*************************************************************'
 
 
@@ -16,7 +17,7 @@ echo '********************* JDK configuration ********************'
 echo '************************************************************'
 echo '1- Installing OpenJdk 1.8 ...'
 yum install java-1.8.0-openjdk-devel unzip -y
-echo '.....done'
+echo 'Done'
 echo '************************************************************'
 
 
@@ -25,26 +26,27 @@ echo '************************************************************'
 echo '********** Elastic Search 7.7.0 OSS Install ****************'
 echo '************************************************************'
 
-echo '2- Create a working dir'
+echo '2- Create a working dir ************************************'
 mkdir /home/efk/deploy
-echo '.... done'
+echo 'Done'
 
-echo 'move to create dir'
+echo 'move to create dir *****************************************'
 cd /home/efk/deploy
+echo 'Done'
 
-echo '3- Download ElasticSearch 7.7.0 OSS'
+echo '3- Download ElasticSearch 7.7.0 OSS ************************'
 curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
-echo '.... done'
+echo 'Done'
 
-echo '4- Untar downloaded package....'
+echo '4- Untar downloaded package ********************************'
 tar -xzf elasticsearch-oss-7.7.0-linux-x86_64.tar.gz
 mv elasticsearch*/ elasticsearch
 cd elasticsearch
 sudo ln -s /usr/lib/jvm/java-1.8.0/lib/tools.jar lib/
 
-echo '5- Download and Install OpenDistro JOB SCHEDULER plugin ...'
+echo '5- Download and Install OpenDistro JOB SCHEDULER plugin **'
 sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-1.8.0.0.zip
-echo '..... Done'
+echo 'Done'
 
 echo '6- Download and Install OpenDistro Alerting plugin for ElasticSearch ... '
 sudo bin/elasticsearch-plugin install --batch https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-alerting/opendistro_alerting-1.8.0.0.zip
@@ -80,15 +82,17 @@ cd /home/efk/deploy
 curl -O https://artifacts.elastic.co/downloads/kibana/kibana-oss-7.7.0-linux-x86_64.tar.gz
 echo '...done'
 
-echo '2- untar Kibana downloaded package'
+echo '2- untar Kibana downloaded package******************************'
 tar -xzf kibana-oss-7.7.0-linux-x86_64.tar.gz
 echo '...done'
 
-echo '3- Rename Kibana folder'
+echo '3- Rename Kibana folder*****************************************'
 mv kibana*/ kibana
+echo 'Done'
 
-echo '4- Move to kibana Folder'
+echo '4- Move to kibana Folder****************************************'
 cd /home/efk/deploy/kibana
+echo 'Done'
 
 
 echo '5- Install OpenDistro Alerting plugin for Kibana'
@@ -108,13 +112,16 @@ echo '*****************************************************************'
 echo '******* Download and install MetricBeat 7.7.0 OSS ***************'
 echo '*****************************************************************'
 
-echo '1- Move to deplyment folder' 
+echo '1- Move to deplyment folder ************************************' 
 cd /home/efk/deploy
+echo 'Done'
 
-echo '2- Download Metricbeat OSS package'
+echo '2- Download Metricbeat OSS package*****************************'
 curl -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-oss-7.7.0-linux-x86_64.tar.gz
+echo 'Done'
 
-echo '2- untar metricbeat downloaded package'
+
+echo '2- untar metricbeat downloaded package*************************'
 mv metric* metricbeat.tar.gz
 tar -xzf metricbeat.tar.gz
 mv metric*/ metricbeat
@@ -122,13 +129,15 @@ mv metric*/ metricbeat
 chown -R efk /home/efk/deploy/metricbeat
 cd /home/efk/deploy/metricbeat
 mv metricbeat.yml metricbeat.yml.orig
+echo 'Done'
 
-echo '3- Load metricbeat config file from Github'
+echo '3- Load metricbeat config file from Github********************'
 curl -O https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat.yml
+echo 'Done'
 
-echo '4- Change metricbeat folder permissions to efk user' 
+echo '4- Change metricbeat folder permissions to efk user*********' 
 chown -R efk /home/efk/deploy/metricbeat
-
+echo 'Done'
 echo '************************ Loading metricbeat dashboards**************************************'
 su efk -c "./metricbeat setup --dashboards"
 echo '*********************************************************************************************'
@@ -172,8 +181,7 @@ su efk -c "./metricbeat -e &"
 echo '*************  Connect to server IP for outside tests ******************************************'
 echo '************************************************************************************************'
 echo '************************************************************************************************'
-
-echo "http://`curl ifconfig.co`:5601"
+echo "************************  http://`curl ifconfig.co`:5601****************************************"
 echo '************************************************************************************************'
 echo '************************************************************************************************'
 echo '************************************************************************************************'
@@ -187,9 +195,13 @@ sudo systemctl restart sshd
 echo '************************************************************************************************'
 
 
-
-
-
+acho 'END SERVER CONFIG'
+echo '************************************************************************************************'
+echo '************************************************************************************************'
 echo '************************************************************************************************'
 echo ' CAP GEMINI '
 echo '**************************************   All rights reserved by Capgemini. Copyright © 2020 ****'
+echo '************************************************************************************************'
+echo '************************************************************************************************'
+echo '************************************************************************************************'
+
