@@ -66,7 +66,7 @@ echo '**************************************************************************
 
 echo '**************************** Install Fluend ***************************************************'
 sudo curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent4.sh | sh
-echo '*.* @10.0.2.100:5140' >> /etc/rsyslog.conf
+echo '*.* @10.0.2.101:5140' >> /etc/rsyslog.conf
 sudo systemctl restart rsyslog
 
 cd /etc/td-agent
