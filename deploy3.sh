@@ -60,7 +60,7 @@ echo '6- Configuring network-host parameter for elasticsearch '
 #echo 'node.data: true' >> config/elasticsearch.yml
 #echo 'transport.host: localhost' >> config/elasticsearch.yml
 echo 'cluster.name: hysOssCluster' >> config/elasticsearch.yml
-echo 'network.host: 0.0.0.0' >> config/elasticsearch.yml
+echo 'network.host: 127.0.0.1' >> config/elasticsearch.yml
 echo 'http.host: 0.0.0.0' >> config/elasticsearch.yml
 echo '... Done'
 echo '-----------------------------------------------------------------------------------------------------------------------------------------------------'
@@ -159,7 +159,8 @@ echo '*********************************** End FlentD config ********************
 
 echo '*************************** Start Elastic in daemon mode *****************************************'
 cd /home/efk/deploy/elasticsearch/bin
-su efk -c "./elasticsearch -d &"
+su efk -c "./elasticsearch &"
+#su efk -c "./elasticsearch -d &"
 
 sleep 30 ; echo "Fin du sleep!!"
 
