@@ -6,7 +6,7 @@
 #
 # You can find the full configuration reference here:
 # https://www.elastic.co/guide/en/beats/metricbeat/index.html
-
+metricbeat.max_start_delay: 300s
 #==========================  Modules configuration ============================
 
 metricbeat.config.modules:
