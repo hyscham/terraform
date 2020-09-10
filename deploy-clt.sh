@@ -83,7 +83,7 @@ echo '*********************************** End FlentD config ********************
 echo '***************************         Start MetricBeat    ****************************************'
 cd /home/efk/deploy/metricbeat
 
-su efk -c "./metricbeat -e &" 
+su efk -c "./metricbeat run &" 
 #sudo ./metricbeat run &
 
 
