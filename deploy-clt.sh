@@ -85,7 +85,7 @@ cd /home/efk/deploy/metricbeat
 sudo curl -O  https://raw.githubusercontent.com/hyscham/terraform/master/metricbeat_autostarter.sh
 chown -R efk /home/efk/deploy/metricbeat
 sudo chmod 777 metricbeat_autostarter.sh
-su efk -c ".metricbeat_autostarter.sh &"
+su efk -c "./metricbeat_autostarter.sh &"
 
 #nohup bash -c 'su efk -c "while [ true ]; do echo test; done;"' &
 #while true;do ./metricbeat run -e;sleep 5;done;
