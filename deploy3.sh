@@ -104,6 +104,7 @@ echo 'Done'
 
 echo '4- Move to kibana Folder****************************************'
 cd /home/efk/deploy/kibana
+chown -R efk /home/efk/deploy/kibana
 echo 'Done'
 
 
@@ -155,7 +156,7 @@ su efk -c "./metricbeat setup --dashboards"
 echo '*********************************************************************************************'
 
 echo '****************************  display server IP for outside tests ****************************'
-curl ifconfig.c
+curl ifconfig.co
 echo '**********************************************************************************************'
 
 echo '**************************** Install Fluend ***************************************************'
