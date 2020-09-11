@@ -83,8 +83,8 @@ echo '*********************************** End FlentD config ********************
 echo '***************************         Start MetricBeat    ****************************************'
 cd /home/efk/deploy/metricbeat
 
-echo 
-su efk -c "while true;do ./metricbeat run -e;sleep 5;done;" & 
+nohup bash -c 'su efk -c "while [ true ]; do echo test; done;"' &
+#su efk -c "while true;do ./metricbeat run -e;sleep 5;done;" & 
 #while true;do ./metricbeat run -e;sleep 5;done;
 #sudo ./metricbeat run &
 
